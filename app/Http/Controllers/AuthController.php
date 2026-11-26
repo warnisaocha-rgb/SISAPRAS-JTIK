@@ -6,7 +6,6 @@ use App\Mail\PasswordResetConfirmMail;
 use App\Models\LoginHistory;
 use App\Models\Ruangan;
 use App\Models\User;
-use App\Services\CampusStudentService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,17 +22,13 @@ class AuthController extends Controller
     private const LOCKOUT_SECONDS = 15 * 60;
     private const RESET_EXPIRE_MINUTES = 60;
 
-    public function __construct(
-        private readonly CampusStudentService $campusStudents,
-    ) {}
-
     // Halaman pembukaan dengan animasi (root / -> Slide 2 khusus Portal Mahasiswa)
     public function showOpening(Request $request)
     {
         return view('animasi_pembukaan', $this->resolveLoginThrottleState($request, 'mahasiswa'));
     }
 
-    // Halaman Portal Login khusus Mahasiswa (Data IP Kampus)
+    // Halaman Portal Login khusus Mahasiswa (Database Aplikasi)
     public function showLogin(Request $request)
     {
         if (Auth::check()) {
@@ -107,7 +102,7 @@ class AuthController extends Controller
             ->with('status', 'Pendaftaran akun Pengelola berhasil dikirim. Mohon tunggu persetujuan (ACC) dari Admin Sarpras sebelum masuk ke sistem.');
     }
 
-    // Memproses login khusus Mahasiswa melalui layanan IP Kampus (+ fallback data tersinkron)
+    // Memproses login khusus Mahasiswa langsung menggunakan data akun pada database
     public function loginMahasiswa(Request $request)
     {
         $request->validate([
@@ -175,39 +170,17 @@ class AuthController extends Controller
               ->onlyInput('nomor_induk');
         }
 
-        // Autentikasi ke layanan IP Kampus (atau data mahasiswa lokal yang sudah tersinkron; tidak membuat akun baru sembarangan)
-        $result = $this->campusStudents->authenticate($identifier, $password);
+        // Autentikasi mahasiswa langsung dari tabel users di database (tidak membuat akun baru otomatis)
+        $field = filter_var($identifier, FILTER_VALIDATE_EMAIL) ? 'email' : 'nomor_induk';
+        $student = User::where('role', 'mahasiswa')
+            ->where($field, $identifier)
+            ->first();
 
-        if ($result['ok'] && isset($result['user'])) {
-            /** @var User $student */
-            $student = $result['user'];
-
-            RateLimiter::clear($throttleKey);
-            $request->session()->forget('login_throttle_ident_mahasiswa');
-            Auth::login($student, $remember);
-            $request->session()->regenerate();
-
-            $sourceLabel = ($result['source'] ?? '') === 'campus_api'
-                ? 'Autentikasi via IP Kampus'
-                : 'Autentikasi data mahasiswa terdaftar';
-
-            $this->recordLoginHistory(
-                $request,
-                $student,
-                $identifier,
-                'mahasiswa',
-                'mahasiswa',
-                'berhasil',
-                $sourceLabel
-            );
-
-            return $this->redirectSesuaiRole($student);
+        if (!$student || !Hash::check($password, $student->password)) {
+            return $this->handleFailedLoginAttempt($request, $throttleKey, $normalizedIdent, 'mahasiswa', $student);
         }
 
-        $reason = $result['reason'] ?? 'invalid_credentials';
-        $student = $result['user'] ?? null;
-
-        if ($reason === 'inactive') {
+        if ($student->status_akun !== 'aktif') {
             RateLimiter::clear($throttleKey);
             $request->session()->forget('login_throttle_ident_mahasiswa');
 
@@ -226,23 +199,22 @@ class AuthController extends Controller
             ])->onlyInput('nomor_induk');
         }
 
-        if ($reason === 'campus_unreachable') {
-            $this->recordLoginHistory(
-                $request,
-                $student,
-                $identifier,
-                'mahasiswa',
-                'mahasiswa',
-                'gagal',
-                'Server IP Kampus tidak dapat dijangkau'
-            );
+        RateLimiter::clear($throttleKey);
+        $request->session()->forget('login_throttle_ident_mahasiswa');
+        Auth::login($student, $remember);
+        $request->session()->regenerate();
 
-            return back()->withErrors([
-                'login_error' => 'Server data mahasiswa kampus sedang tidak dapat dijangkau. Silakan coba beberapa saat lagi.',
-            ])->onlyInput('nomor_induk');
-        }
+        $this->recordLoginHistory(
+            $request,
+            $student,
+            $identifier,
+            'mahasiswa',
+            'mahasiswa',
+            'berhasil',
+            'Login portal mahasiswa berhasil'
+        );
 
-        return $this->handleFailedLoginAttempt($request, $throttleKey, $normalizedIdent, 'mahasiswa', $student);
+        return $this->redirectSesuaiRole($student);
     }
 
     // Alias backward-compatible untuk rute atau pemanggil lama

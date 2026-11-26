@@ -76,7 +76,7 @@ Route::post('/mockup/switch-role', function (\Illuminate\Http\Request $request) 
     ]);
 })->name('mockup.switch-role');
 
-// Jalur Login Mahasiswa (Data IP Kampus)
+// Jalur Login Mahasiswa (Akun Terdaftar Database)
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'loginMahasiswa'])->name('login.post');
 

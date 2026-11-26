@@ -753,7 +753,7 @@
                     <!-- Header Kartu: Masuk Akun Mahasiswa -->
                     <div class="card-brand-header">
                         <h2 class="card-title-navy">Masuk Akun Mahasiswa</h2>
-                        <p class="card-subtitle-muted">Gunakan NIM dan kata sandi akun kampus Anda</p>
+                        <p class="card-subtitle-muted">Gunakan NIM dan kata sandi akun terdaftar Anda</p>
                     </div>
 
                     @php
@@ -795,7 +795,7 @@
                         <div class="form-group">
                             <div class="label-row">
                                 <span class="label-main">NIM Mahasiswa:</span>
-                                <span class="label-hint">Terhubung data kampus</span>
+                                <span class="label-hint">Akun terdaftar</span>
                             </div>
                             <input 
                                 type="text" 
