@@ -2198,9 +2198,9 @@
               @if($bebasPinjam->status_lab_komputer === 'bebas')
                 <span class="pill-status pill-green">Bebas</span>
               @elseif($bebasPinjam->status_lab_komputer === 'tertahan')
-                <span class="pill-status pill-red">TERTAHAN</span>
+                <span class="pill-status pill-red">Tertahan</span>
               @else
-                <span class="pill-status pill-yellow">PROSES CEK</span>
+                <span class="pill-status pill-yellow">Proses Cek</span>
               @endif
             </div>
           </div>
@@ -2221,9 +2221,9 @@
               @if($bebasPinjam->status_lab_jaringan === 'bebas')
                 <span class="pill-status pill-green">Bebas</span>
               @elseif($bebasPinjam->status_lab_jaringan === 'tertahan')
-                <span class="pill-status pill-red">TERTAHAN</span>
+                <span class="pill-status pill-red">Tertahan</span>
               @else
-                <span class="pill-status pill-yellow">PROSES CEK</span>
+                <span class="pill-status pill-yellow">Proses Cek</span>
               @endif
             </div>
           </div>
@@ -2244,9 +2244,9 @@
               @if($bebasPinjam->status_ruang_inventaris === 'bebas')
                 <span class="pill-status pill-green">Bebas</span>
               @elseif($bebasPinjam->status_ruang_inventaris === 'tertahan')
-                <span class="pill-status pill-red">TERTAHAN</span>
+                <span class="pill-status pill-red">Tertahan</span>
               @else
-                <span class="pill-status pill-yellow">PROSES CEK</span>
+                <span class="pill-status pill-yellow">Proses Cek</span>
               @endif
             </div>
           </div>
@@ -2312,7 +2312,7 @@
       <div class="modal-header">
         <div class="modal-title-wrap">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#08296E" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span class="modal-title">SURAT KETERANGAN BEBAS SARANA PRASARANA</span>
+          <span class="modal-title">Surat Keterangan Bebas Sarana Prasarana</span>
         </div>
         <button type="button" class="btn-close-modal" onclick="closeModal('modalCetakBebasPinjam')">×</button>
       </div>

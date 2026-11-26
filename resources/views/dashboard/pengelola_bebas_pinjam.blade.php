@@ -1772,8 +1772,8 @@
           <!-- KOP SURAT -->
           <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom: 1.5px solid #0F172A; padding-bottom: 12px; margin-bottom: 14px;">
             <div>
-              <div style="font-size: 12px; font-weight: 900; color: var(--primary-navy); letter-spacing: -0.2px;">KARTU BEBAS PEMINJAMAN SARPRAS TUNGGAL</div>
-              <div style="font-size: 12px; color: #64748B; font-weight: 600;">JURUSAN TEKNIK INFORMATIKA DAN KOMPUTER - FT UNM</div>
+              <div style="font-size: 12px; font-weight: 800; color: var(--primary-navy); letter-spacing: -0.2px;">Kartu Bebas Peminjaman Sarpras Tunggal</div>
+              <div style="font-size: 12px; color: #64748B; font-weight: 600;">Jurusan Teknik Informatika dan Komputer - FT UNM</div>
             </div>
             <div id="certKodeBadge" style="font-size: 11px; font-weight: 800; background: #F1F5F9; color: var(--primary-navy); padding: 4px 10px; border-radius: 4px; border: 1px solid #CBD5E1;">
               BBS-2026-036
@@ -2133,7 +2133,7 @@
       <div class="modal-header" style="padding: 16px 20px; border-bottom: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between;">
         <div style="display: flex; align-items: center; gap: 10px;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          <span style="font-size: 13.5px; font-weight: 800; color: #0F172A;">{{ strtoupper($ruangan->nama_ruangan ?? $badgeRuangan ?? 'LABORATORIUM') }} — Informasi &amp; Cek Stok</span>
+          <span style="font-size: 13.5px; font-weight: 800; color: #0F172A;">{{ $ruangan->nama_ruangan ?? $badgeRuangan ?? 'Laboratorium' }} — Informasi &amp; Cek Stok</span>
         </div>
         <button type="button" onclick="closeRoomInfoModal()" style="border:none; background:none; font-size:18px; cursor:pointer; color:#64748B;">×</button>
       </div>
@@ -2288,7 +2288,7 @@
       } else if (status === 'tertahan') {
         return '<span class="room-cert-badge tertahan">Ditolak</span>';
       } else {
-        return '<span class="room-cert-badge belum_cek">◷ MENUNGGU</span>';
+        return '<span class="room-cert-badge belum_cek">Menunggu</span>';
       }
     }
 
@@ -2302,11 +2302,11 @@
 
       const finalStatusEl = document.getElementById('detailStatusFinal');
       if (item.status_final === 'bebas') {
-        finalStatusEl.innerHTML = '<span class="room-cert-badge bebas">LENGKAP &amp; BEBAS SEMUA LAB</span>';
+        finalStatusEl.innerHTML = '<span class="room-cert-badge bebas">Lengkap &amp; Bebas Semua Lab</span>';
       } else if (item.status_final === 'tertahan') {
-        finalStatusEl.innerHTML = '<span class="room-cert-badge tertahan">DITOLAK (ADA TANGGUNGAN)</span>';
+        finalStatusEl.innerHTML = '<span class="room-cert-badge tertahan">Ditolak (Ada Tanggungan)</span>';
       } else {
-        finalStatusEl.innerHTML = '<span class="room-cert-badge belum_cek">PROSES VERIFIKASI</span>';
+        finalStatusEl.innerHTML = '<span class="room-cert-badge belum_cek">Proses Verifikasi</span>';
       }
 
       document.getElementById('detailStatusLabKomputer').innerHTML = getStatusBadgeHtml(item.status_lab_komputer);

@@ -2039,7 +2039,7 @@
                 <div id="ktmCardProdi" style="font-size: 11.5px; color: #94A3B8; margin-top: 1px;">-</div>
               </div>
               <div style="text-align: right;">
-                <div style="font-size: 11.5px; background: rgba(255,255,255,0.15); padding: 2px 7px; border-radius: 4px; display: inline-block;">KTM RESMI</div>
+                <div style="font-size: 11.5px; background: rgba(255,255,255,0.15); padding: 2px 7px; border-radius: 4px; display: inline-block;">KTM Resmi</div>
                 <div style="font-size: 11.5px; color: #94A3B8; margin-top: 4px;">JTIK FT UNM</div>
               </div>
             </div>
@@ -2172,7 +2172,7 @@
       <div class="modal-header">
         <div class="modal-title-wrap">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          <span class="modal-title">{{ strtoupper($ruangan->nama_ruangan ?? $badgeRuangan ?? 'LABORATORIUM') }} — Informasi &amp; Cek Stok</span>
+          <span class="modal-title">{{ $ruangan->nama_ruangan ?? $badgeRuangan ?? 'Laboratorium' }} — Informasi &amp; Cek Stok</span>
         </div>
         <button type="button" class="btn-close-modal" onclick="closeRoomInfoModal()">×</button>
       </div>

@@ -209,7 +209,7 @@
   }
 
   @media screen and (max-width: 960px) {
-    html, body {
+    body:not(.intro-active) {
       display: block !important;
       overflow-x: clip !important;
       overflow-y: visible !important;
@@ -644,11 +644,11 @@
       content: attr(data-label);
       display: block;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 9.5px;
+      font-size: 10.5px;
       font-weight: 700;
       color: #64748B;
-      text-transform: uppercase;
-      letter-spacing: 0.35px;
+      text-transform: none;
+      letter-spacing: 0.1px;
       margin-bottom: 3px;
     }
 
@@ -1075,7 +1075,173 @@
       padding: 10px 14px;
     }
   }
+
+  /* ===================================================================== */
+  /* PENYELARASAN ANGKA TENGAH, NORMALISASI KAPITAL, & FEEDBACK LOADING    */
+  /* ===================================================================== */
+  .input-counter,
+  .stepper-val,
+  .btn-counter,
+  .btn-stepper {
+    font-variant-numeric: tabular-nums;
+    text-align: center !important;
+    box-sizing: border-box;
+  }
+  .input-counter {
+    appearance: textfield;
+    -moz-appearance: textfield;
+    padding: 0 !important;
+    line-height: 26px;
+  }
+  .input-counter::-webkit-outer-spin-button,
+  .input-counter::-webkit-inner-spin-button,
+  .qty-counter-row input[type="number"]::-webkit-outer-spin-button,
+  .qty-counter-row input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .btn-counter,
+  .btn-stepper {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    padding: 0 !important;
+    transition: transform 0.1s ease, background-color 0.15s ease, opacity 0.15s ease;
+  }
+  .btn-counter:active:not(:disabled),
+  .btn-stepper:active:not(:disabled) {
+    transform: scale(0.94);
+  }
+  .stepper-val {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 30px;
+    height: 26px;
+    padding: 0 4px !important;
+    line-height: 1 !important;
+  }
+  .nav-badge-count,
+  .unit-pill-count,
+  .filter-pill-count,
+  .cart-qty-badge,
+  .badge-sidebar {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    font-variant-numeric: tabular-nums;
+    line-height: 1 !important;
+  }
+
+  .nav-header-label,
+  .portal-role-tag,
+  .reg-tag,
+  .status-tag,
+  .cart-figma-box-title,
+  .verified-user-title,
+  .table-caption,
+  .table-caption-title,
+  .card-col-title,
+  .note-bubble-title,
+  .eval-section-title,
+  .laboran-report-title,
+  .badge-status-box,
+  .badge-lab-status,
+  .rack-label-tag,
+  .condition-badge,
+  .role-badge,
+  .modal-title-text,
+  .detail-card-title,
+  .form-label-sm,
+  .approval-table th,
+  .data-table thead th,
+  .btn-orange-pinjam,
+  .btn-green-pinjam,
+  .btn-submit-figma-orange,
+  .btn-submit-main,
+  .btn-submit {
+    text-transform: none !important;
+  }
+
+  .sisapras-top-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 20000;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    background: rgba(8, 41, 110, 0.12);
+    overflow: hidden;
+  }
+  .sisapras-top-loader.active {
+    opacity: 1;
+  }
+  .sisapras-top-loader-bar {
+    height: 100%;
+    width: 40%;
+    background: linear-gradient(90deg, #08296E, #ED7411);
+    border-radius: 0 3px 3px 0;
+    animation: sisaprasProgressSlide 1.05s ease-in-out infinite;
+  }
+  @keyframes sisaprasProgressSlide {
+    0% { transform: translateX(-110%); }
+    100% { transform: translateX(320%); }
+  }
+  @keyframes sisaprasSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .sisapras-btn-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+    animation: sisaprasSpin 0.65s linear infinite;
+    flex-shrink: 0;
+  }
+  .sisapras-btn-loading {
+    opacity: 0.88 !important;
+    cursor: wait !important;
+    pointer-events: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+  }
+  .sisapras-region-loading {
+    opacity: 0.6;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+  }
+  .sisapras-search-spinner {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: -6.5px;
+    width: 13px;
+    height: 13px;
+    border: 2px solid #94A3B8;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: sisaprasSpin 0.65s linear infinite;
+    pointer-events: none;
+    display: none;
+    z-index: 4;
+  }
+  .sisapras-searching .sisapras-search-spinner {
+    display: inline-block;
+  }
 </style>
+
+<div id="sisaprasTopLoader" class="sisapras-top-loader" aria-hidden="true"><div class="sisapras-top-loader-bar"></div></div>
 
 <div id="sisaprasMobileBackdrop" class="sisapras-mobile-backdrop" aria-hidden="true"></div>
 
@@ -1100,6 +1266,67 @@
 <script>
   (function() {
     let pendingConfirmAction = null;
+    const loadingButtons = [];
+    let activeProgressCount = 0;
+
+    window.sisaprasStartProgress = function() {
+      activeProgressCount++;
+      const bar = document.getElementById('sisaprasTopLoader');
+      if (bar) bar.classList.add('active');
+    };
+
+    window.sisaprasStopProgress = function(force) {
+      activeProgressCount = force ? 0 : Math.max(0, activeProgressCount - 1);
+      if (activeProgressCount === 0) {
+        const bar = document.getElementById('sisaprasTopLoader');
+        if (bar) bar.classList.remove('active');
+      }
+    };
+
+    window.sisaprasSetButtonLoading = function(btn, label) {
+      if (!btn || btn.dataset.sisaprasLoading === '1') return;
+      if (btn.tagName === 'INPUT') {
+        btn.dataset.origVal = btn.value;
+        btn.value = label || 'Memproses...';
+      } else {
+        btn.dataset.origHtml = btn.innerHTML;
+        const textSpan = document.createElement('span');
+        textSpan.textContent = label || 'Memproses...';
+        btn.innerHTML = '<span class="sisapras-btn-spinner" aria-hidden="true"></span>';
+        btn.appendChild(textSpan);
+      }
+      btn.dataset.sisaprasLoading = '1';
+      btn.dataset.origDisabled = btn.disabled ? '1' : '0';
+      btn.disabled = true;
+      btn.classList.add('sisapras-btn-loading');
+      loadingButtons.push(btn);
+    };
+
+    window.sisaprasResetButtons = function() {
+      while (loadingButtons.length) {
+        const btn = loadingButtons.pop();
+        if (!btn) continue;
+        if (btn.tagName === 'INPUT') {
+          if (btn.dataset.origVal !== undefined) btn.value = btn.dataset.origVal;
+        } else if (btn.dataset.origHtml !== undefined) {
+          btn.innerHTML = btn.dataset.origHtml;
+        }
+        btn.disabled = btn.dataset.origDisabled === '1';
+        btn.classList.remove('sisapras-btn-loading');
+        delete btn.dataset.sisaprasLoading;
+      }
+      document.querySelectorAll('form[data-submitting="1"]').forEach(function(f) {
+        delete f.dataset.submitting;
+      });
+      document.querySelectorAll('[style*="opacity: 0.72"]').forEach(function(a) {
+        a.style.opacity = '';
+      });
+    };
+
+    window.addEventListener('pageshow', function() {
+      window.sisaprasStopProgress(true);
+      window.sisaprasResetButtons();
+    });
 
     window.showSystemToast = function(message, type) {
       type = type || 'info';
@@ -1141,6 +1368,9 @@
       const okBtn = document.getElementById('sisaprasConfirmOkBtn');
       if (!overlay) return;
 
+      okBtn.disabled = false;
+      okBtn.classList.remove('sisapras-btn-loading');
+      delete okBtn.dataset.sisaprasLoading;
       titleEl.textContent = (opts && opts.title) ? opts.title : 'Konfirmasi Tindakan';
       msgEl.textContent = (opts && opts.message) ? opts.message : 'Apakah Anda yakin ingin melanjutkan tindakan ini?';
       okBtn.textContent = (opts && opts.confirmText) ? opts.confirmText : 'Ya, Lanjutkan';
@@ -1169,6 +1399,9 @@
         danger: isDanger !== false,
         onConfirm: function() {
           form.dataset.confirmed = '1';
+          const submitBtn = form.querySelector('button[type="submit"]:not(:disabled), input[type="submit"]:not(:disabled)');
+          if (submitBtn) window.sisaprasSetButtonLoading(submitBtn, 'Memproses...');
+          window.sisaprasStartProgress();
           form.submit();
         }
       });
@@ -1197,6 +1430,50 @@
         }
       });
 
+      // Umpan balik loading otomatis saat pengiriman formulir & navigasi tautan
+      document.addEventListener('submit', function(e) {
+        if (e.defaultPrevented) return;
+        const form = e.target;
+        if (!form || form.tagName !== 'FORM') return;
+        const method = (form.getAttribute('method') || 'GET').toUpperCase();
+        if (method === 'GET' || form.dataset.noLoading === '1') return;
+        if (form.dataset.submitting === '1') {
+          e.preventDefault();
+          return;
+        }
+        form.dataset.submitting = '1';
+
+        const submitBtn = e.submitter || form.querySelector('button[type="submit"]:not(:disabled), button:not([type]):not(:disabled), input[type="submit"]:not(:disabled)');
+        if (submitBtn) {
+          const customLabel = submitBtn.getAttribute('data-loading-text');
+          const rawText = (submitBtn.textContent || submitBtn.value || '').trim().toLowerCase();
+          let loadingLabel = customLabel || 'Memproses...';
+          if (!customLabel) {
+            if (rawText.indexOf('masuk') !== -1) loadingLabel = 'Memeriksa akun...';
+            else if (rawText.indexOf('kirim') !== -1) loadingLabel = 'Mengirim...';
+            else if (rawText.indexOf('simpan') !== -1 || rawText.indexOf('perbarui') !== -1) loadingLabel = 'Menyimpan...';
+            else if (rawText.indexOf('ajukan') !== -1 || rawText.indexOf('daftar') !== -1) loadingLabel = 'Mengajukan...';
+            else if (rawText.indexOf('hapus') !== -1) loadingLabel = 'Menghapus...';
+            else if (rawText.indexOf('keluar') !== -1) loadingLabel = 'Keluar...';
+          }
+          window.sisaprasSetButtonLoading(submitBtn, loadingLabel);
+        }
+        window.sisaprasStartProgress();
+      });
+
+      document.addEventListener('click', function(e) {
+        if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        const link = e.target && typeof e.target.closest === 'function' ? e.target.closest('a[href]') : null;
+        if (!link) return;
+        const href = link.getAttribute('href') || '';
+        if (!href || href.startsWith('#') || href.startsWith('javascript:') || link.hasAttribute('download') || link.getAttribute('target') === '_blank') return;
+        if (link.closest('.intro-stage') || link.classList.contains('nav-brand')) return;
+        if (link.matches('.nav-item, .unit-pill-btn, .filter-pill-btn, .tab-pill, .filter-btn, .sisapras-pagination-bar a, .nav-portal-link, .btn-register-outline')) {
+          link.style.opacity = '0.72';
+          window.sisaprasStartProgress();
+        }
+      });
+
       // Auto-dismiss flash alerts setelah 5 detik (kecuali validasi list panjang)
       document.querySelectorAll('.alert-banner, .alert-success-banner, .alert-danger-banner').forEach(function(el) {
         if (el.querySelector('ul')) return; // Biarkan daftar error validasi tetap terbaca
@@ -1215,7 +1492,7 @@
         }
       @endif
 
-      // Live search otomatis saat mengetik (tanpa harus tekan Enter / mengetik kata lengkap)
+      // Live search otomatis saat mengetik (dengan indikator loading)
       (function initLiveSearch() {
         const searchInputs = document.querySelectorAll('form[method="GET"] input[name="search"], form[method="get"] input[name="search"]');
         if (!searchInputs.length || typeof window.fetch !== 'function' || typeof window.DOMParser !== 'function') {
@@ -1226,9 +1503,34 @@
           const form = input.closest('form');
           if (!form) return;
 
+          const wrap = input.parentElement;
+          let searchSpinner = null;
+          if (wrap) {
+            if (window.getComputedStyle(wrap).position === 'static') {
+              wrap.style.position = 'relative';
+            }
+            searchSpinner = wrap.querySelector('.sisapras-search-spinner');
+            if (!searchSpinner) {
+              searchSpinner = document.createElement('span');
+              searchSpinner.className = 'sisapras-search-spinner';
+              searchSpinner.setAttribute('aria-hidden', 'true');
+              if (wrap.querySelector('.btn-clear-search, a[title*="Hapus"]')) {
+                searchSpinner.style.right = '34px';
+              }
+              wrap.appendChild(searchSpinner);
+            }
+          }
+
           let debounceTimer = null;
           let activeController = null;
           let lastQueryUrl = null;
+
+          function setSearchLoading(isLoading) {
+            if (wrap) wrap.classList.toggle('sisapras-searching', isLoading);
+            document.querySelectorAll('.table-card, .cards-grid, .table-container-card').forEach(function(region) {
+              region.classList.toggle('sisapras-region-loading', isLoading);
+            });
+          }
 
           function syncFilterLinks(searchVal) {
             document.querySelectorAll('.unit-pill-btn, .filter-pill-btn, .tab-pill, .filter-btn').forEach(function(link) {
@@ -1277,11 +1579,15 @@
             if (activeController) {
               activeController.abort();
             }
-            activeController = new AbortController();
+            const thisController = new AbortController();
+            activeController = thisController;
+
+            setSearchLoading(true);
+            window.sisaprasStartProgress();
 
             fetch(targetUrl, {
               headers: { 'X-Requested-With': 'XMLHttpRequest' },
-              signal: activeController.signal
+              signal: thisController.signal
             })
               .then(function(res) {
                 if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -1317,6 +1623,13 @@
               .catch(function(err) {
                 if (err && err.name === 'AbortError') return;
                 lastQueryUrl = null;
+              })
+              .finally(function() {
+                window.sisaprasStopProgress();
+                if (activeController === thisController) {
+                  activeController = null;
+                  setSearchLoading(false);
+                }
               });
           }
 

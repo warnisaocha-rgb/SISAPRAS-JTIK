@@ -886,23 +886,53 @@
       border-radius: 5px;
       border: 1px solid var(--border-color);
       background: #FFFFFF;
+      color: #0F172A;
       font-weight: 700;
       font-size: 14px;
-      display: flex;
+      line-height: 1;
+      padding: 0;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      transition: transform 0.1s ease, background-color 0.15s ease;
+    }
+
+    .btn-counter:hover:not(:disabled) {
+      background: #F1F5F9;
+    }
+
+    .btn-counter:active:not(:disabled) {
+      transform: scale(0.94);
+    }
+
+    .btn-counter:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
     }
 
     .input-counter {
-      width: 45px;
+      width: 48px;
+      height: 28px;
       text-align: center;
-      padding: 4px 6px;
+      padding: 0;
+      line-height: 26px;
+      font-variant-numeric: tabular-nums;
       border: 1px solid var(--border-color);
       border-radius: 5px;
       font-weight: 700;
-      font-size: 12px;
+      font-size: 12.5px;
+      color: #0F172A;
+      background: #FFFFFF;
       outline: none;
+      appearance: textfield;
+      -moz-appearance: textfield;
+    }
+
+    .input-counter::-webkit-outer-spin-button,
+    .input-counter::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
 
     .btn-orange-pinjam {
@@ -1770,9 +1800,9 @@
         <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0;">
           <span style="font-size: 11px; font-weight: 700; color: #334155;">Jumlah Unit yang diajukan:</span>
           <div class="qty-counter-row">
-            <button type="button" class="btn-counter" onclick="adjustQty(-1)">-</button>
-            <input type="number" id="mdoQtyInput" class="input-counter" value="1" min="1" max="2" readonly>
-            <button type="button" class="btn-counter" onclick="adjustQty(1)">+</button>
+            <button type="button" id="mdoBtnMinus" class="btn-counter" onclick="adjustQty(-1)" aria-label="Kurangi jumlah">-</button>
+            <input type="number" id="mdoQtyInput" class="input-counter" value="1" min="1" max="2" readonly aria-label="Jumlah unit">
+            <button type="button" id="mdoBtnPlus" class="btn-counter" onclick="adjustQty(1)" aria-label="Tambah jumlah">+</button>
           </div>
         </div>
       </div>
@@ -1782,7 +1812,7 @@
           <span>Masukkan Keranjang</span>
         </button>
         <button type="button" class="btn-orange-pinjam" onclick="proceedToQuickPinjam()">
-          PINJAM SEKARANG
+          Pinjam Sekarang
         </button>
       </div>
     </div>
@@ -2189,6 +2219,18 @@
       if (e.target.id === id) closeModal(id);
     }
 
+    function syncQtyCounterButtons() {
+      const input = document.getElementById('mdoQtyInput');
+      const btnMinus = document.getElementById('mdoBtnMinus');
+      const btnPlus = document.getElementById('mdoBtnPlus');
+      if (!input) return;
+      const val = parseInt(input.value, 10) || 1;
+      const min = parseInt(input.min, 10) || 1;
+      const max = parseInt(input.max, 10) || 2;
+      if (btnMinus) btnMinus.disabled = val <= min;
+      if (btnPlus) btnPlus.disabled = val >= max;
+    }
+
     function openModalDetailOpsi(item) {
       activeItem = item;
       document.getElementById('mdoKode').textContent = item.kode;
@@ -2196,7 +2238,8 @@
       document.getElementById('mdoRuangan').textContent = item.ruangan;
       document.getElementById('mdoTersedia').textContent = item.tersedia + ' Unit Tersedia';
       document.getElementById('mdoQtyInput').value = 1;
-      document.getElementById('mdoQtyInput').max = Math.min(item.tersedia, item.maks || 2);
+      document.getElementById('mdoQtyInput').max = Math.max(1, Math.min(item.tersedia, item.maks || 2));
+      syncQtyCounterButtons();
 
       const img = document.getElementById('mdoFoto');
       const ph = document.getElementById('mdoPlaceholder');
@@ -2214,12 +2257,13 @@
 
     function adjustQty(delta) {
       const input = document.getElementById('mdoQtyInput');
-      let val = parseInt(input.value) + delta;
-      const min = parseInt(input.min) || 1;
-      const max = parseInt(input.max) || 2;
+      let val = (parseInt(input.value, 10) || 1) + delta;
+      const min = parseInt(input.min, 10) || 1;
+      const max = parseInt(input.max, 10) || 2;
       if (val >= min && val <= max) {
         input.value = val;
       }
+      syncQtyCounterButtons();
     }
 
     function proceedToQuickPinjam() {
@@ -2290,6 +2334,13 @@
       }
       saveCart(cart);
       closeModal('modalDetailOpsi');
+      if (window.showSystemToast) {
+        window.showSystemToast(activeItem.nama + ' (' + qty + ' unit) ditambahkan ke keranjang.', 'success');
+      }
+      const cartBadge = document.getElementById('cartCountBadge');
+      if (cartBadge && typeof cartBadge.animate === 'function') {
+        cartBadge.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.22)' }, { transform: 'scale(1)' }], { duration: 240, easing: 'ease-out' });
+      }
     }
 
     function openCartModal() {

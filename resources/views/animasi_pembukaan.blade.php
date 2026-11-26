@@ -175,8 +175,7 @@
             position: absolute;
             font-size: 10.5px;
             font-weight: 600;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
+            letter-spacing: 0.16em;
             color: rgba(203, 213, 225, 0.72);
             overflow: hidden;
             line-height: 1.4;
@@ -401,8 +400,7 @@
         .intro-sub {
             font-size: clamp(0.66rem, 1.05vw, 0.82rem);
             font-weight: 600;
-            letter-spacing: 0.28em;
-            text-transform: uppercase;
+            letter-spacing: 0.18em;
             color: rgba(203, 213, 225, 0.82);
             transform: translateY(118%);
             opacity: 0;
@@ -467,8 +465,7 @@
             color: var(--brand-navy);
             font-size: 11px;
             font-weight: 800;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
+            letter-spacing: 0.2px;
             margin-bottom: 10px;
         }
 
@@ -1287,10 +1284,14 @@
 </head>
 @php
     $lockSec = (int) ($lockoutSeconds ?? 0);
+    $lockStageMin = (int) ($lockoutStageMinutes ?? 3);
+    $lockAtt = (int) ($lockoutAttempts ?? 3);
+    $mailAlertSent = (bool) ($emailAlertSent ?? false);
     $lockedUserIdent = $lockedIdent ?? '';
-    $remAtt = $remainingAttempts ?? null;
+    $remAtt = isset($remainingAttempts) ? (int) $remainingAttempts : null;
+    $nextLockMin = (int) ($nextLockMinutes ?? 3);
     $prefillIdent = old('nomor_induk', $lockSec > 0 ? $lockedUserIdent : '');
-    $skipIntro = $errors->any() || old('nomor_induk') || $lockSec > 0 || ($remAtt !== null && $remAtt < 3) || session('status') || session('open_forgot_modal');
+    $skipIntro = $errors->any() || old('nomor_induk') || $lockSec > 0 || ($remAtt !== null) || session('status') || session('open_forgot_modal');
 @endphp
 <body class="{{ $skipIntro ? '' : 'intro-active' }}">
 
@@ -1319,7 +1320,7 @@
         <!-- Swiss Editorial Diagonal Frame -->
         <div class="editorial-frame" aria-hidden="true">
             <div class="corner-meta corner-tl"><span>JTIK &mdash; FT UNM</span></div>
-            <div class="corner-meta corner-br"><span>SARANA &amp; PRASARANA</span></div>
+            <div class="corner-meta corner-br"><span>Sarana &amp; Prasarana</span></div>
         </div>
 
         <!-- Centerpiece: ONLY UNM Emblem + Per-Character SI-SAPRAS JTIK -->
@@ -1433,7 +1434,7 @@
 
                         @if($lockSec > 0)
                             <div class="alert-error" id="loginLockoutAlert">
-                                Percobaan masuk gagal sudah mencapai batas maksimal <strong>3 kali</strong>. Silakan tunggu <strong id="lockoutCountdown">15:00</strong> lagi sebelum mencoba kembali.
+                                Percobaan masuk gagal sudah mencapai <strong>{{ $lockAtt }} kali</strong>. Silakan tunggu <strong id="lockoutCountdown">{{ sprintf('%02d:%02d', intdiv($lockSec, 60), $lockSec % 60) }}</strong> ({{ $lockStageMin }} menit) sebelum mencoba kembali.@if($mailAlertSent) Pemberitahuan keamanan telah dikirim otomatis ke email pemilik akun.@endif
                             </div>
                         @elseif($errors->has('login_error'))
                             <div class="alert-error">
@@ -1444,9 +1445,9 @@
                                     </div>
                                 @endif
                             </div>
-                        @elseif($remAtt !== null && $remAtt > 0 && $remAtt < 3)
+                        @elseif($remAtt !== null && $remAtt > 0)
                             <div class="alert-warning">
-                                Peringatan: Anda hanya dapat mencoba masuk maksimal <strong>3 kali</strong> (sisa <strong>{{ $remAtt }}</strong> percobaan lagi).
+                                Peringatan: Sisa <strong>{{ $remAtt }}</strong> percobaan lagi sebelum akses ditahan sementara <strong>{{ $nextLockMin }} menit</strong>{{ $nextLockMin >= 5 ? ' dan dikirim notifikasi ke email' : '' }}.
                             </div>
                         @endif
 
@@ -1510,7 +1511,7 @@
                                 {{ $lockSec > 0 ? 'Coba lagi dalam ' . sprintf('%02d:%02d', intdiv($lockSec, 60), $lockSec % 60) : 'Masuk Portal Mahasiswa' }}
                             </button>
                             <p style="margin-top: 10px; font-size: 11px; color: #64748b; line-height: 1.45;">
-                                Peringatan: percobaan masuk dibatasi maksimal 3 kali.
+                                Keamanan: salah 3x ditahan 3 menit, salah 5x ditahan 5 menit dan diberitahu via email.
                             </p>
                         </form>
 
@@ -1663,6 +1664,7 @@
 
         (function initLoginLockoutCountdown() {
             let remainingSeconds = {{ (int) ($lockoutSeconds ?? 0) }};
+            const lockStageMinutes = {{ (int) ($lockoutStageMinutes ?? 3) }};
             const lockedIdent = (@json($lockedIdent ?? '') || '').toLowerCase();
             const submitBtn = document.getElementById('btnLoginSubmit');
             const identInput = document.getElementById('nomor_induk');
@@ -1688,7 +1690,7 @@
                         alertEl.style.background = '#eff6ff';
                         alertEl.style.color = '#1e3a8a';
                         alertEl.style.borderColor = '#bfdbfe';
-                        alertEl.textContent = 'Waktu tunggu 15 menit selesai. Silakan coba masuk kembali.';
+                        alertEl.textContent = 'Waktu tunggu ' + lockStageMinutes + ' menit selesai. Silakan coba masuk kembali.';
                     }
                     return;
                 }
@@ -1720,5 +1722,7 @@
             }, 1000);
         })();
     </script>
+
+    @include('partials.ui_feedback')
 </body>
 </html>

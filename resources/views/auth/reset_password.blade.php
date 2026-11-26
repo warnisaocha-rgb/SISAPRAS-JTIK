@@ -112,8 +112,7 @@
             border-radius: 5px;
             font-size: 11px;
             font-weight: 800;
-            letter-spacing: 0.4px;
-            text-transform: uppercase;
+            letter-spacing: 0.2px;
             margin-bottom: 10px;
         }
 

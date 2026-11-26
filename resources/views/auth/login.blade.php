@@ -75,8 +75,7 @@
             color: var(--brand-navy);
             font-size: 11px;
             font-weight: 800;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
+            letter-spacing: 0.2px;
             margin-bottom: 10px;
         }
 
@@ -758,7 +757,11 @@
 
                     @php
                         $lockSec = (int) ($lockoutSeconds ?? 0);
+                        $lockStageMin = (int) ($lockoutStageMinutes ?? 3);
+                        $lockAtt = (int) ($lockoutAttempts ?? 3);
+                        $mailAlertSent = (bool) ($emailAlertSent ?? false);
                         $remAtt = isset($remainingAttempts) ? (int) $remainingAttempts : null;
+                        $nextLockMin = (int) ($nextLockMinutes ?? 3);
                         $lockedUserIdent = $lockedIdent ?? null;
                         $prefillIdent = old('nomor_induk', $lockSec > 0 ? ($lockedUserIdent ?? '') : '');
                     @endphp
@@ -771,7 +774,7 @@
 
                     @if($lockSec > 0)
                         <div class="alert-error" id="loginLockoutAlert">
-                            Percobaan masuk gagal sudah mencapai batas maksimal <strong>3 kali</strong>. Silakan tunggu <strong id="lockoutCountdown">15:00</strong> lagi sebelum mencoba kembali.
+                            Percobaan masuk gagal sudah mencapai <strong>{{ $lockAtt }} kali</strong>. Silakan tunggu <strong id="lockoutCountdown">{{ sprintf('%02d:%02d', intdiv($lockSec, 60), $lockSec % 60) }}</strong> ({{ $lockStageMin }} menit) sebelum mencoba kembali.@if($mailAlertSent) Pemberitahuan keamanan telah dikirim otomatis ke email pemilik akun.@endif
                         </div>
                     @elseif($errors->has('login_error'))
                         <div class="alert-error">
@@ -782,9 +785,9 @@
                                 </div>
                             @endif
                         </div>
-                    @elseif($remAtt !== null && $remAtt > 0 && $remAtt < 3)
+                    @elseif($remAtt !== null && $remAtt > 0)
                         <div class="alert-warning">
-                            Peringatan: Anda hanya dapat mencoba masuk maksimal <strong>3 kali</strong> (sisa <strong>{{ $remAtt }}</strong> percobaan lagi).
+                            Peringatan: Sisa <strong>{{ $remAtt }}</strong> percobaan lagi sebelum akses ditahan sementara <strong>{{ $nextLockMin }} menit</strong>{{ $nextLockMin >= 5 ? ' dan dikirim notifikasi ke email' : '' }}.
                         </div>
                     @endif
 
@@ -853,7 +856,7 @@
                             {{ $lockSec > 0 ? 'Coba lagi dalam ' . sprintf('%02d:%02d', intdiv($lockSec, 60), $lockSec % 60) : 'Masuk Portal Mahasiswa' }}
                         </button>
                         <p style="margin-top: 10px; font-size: 11px; color: #64748b; line-height: 1.45;">
-                            Peringatan: percobaan masuk dibatasi maksimal 3 kali.
+                            Keamanan: salah 3x ditahan 3 menit, salah 5x ditahan 5 menit dan diberitahu via email.
                         </p>
                     </form>
 
@@ -926,6 +929,7 @@
 
         (function initLoginLockoutCountdown() {
             let remainingSeconds = {{ (int) ($lockoutSeconds ?? 0) }};
+            const lockStageMinutes = {{ (int) ($lockoutStageMinutes ?? 3) }};
             const lockedIdent = (@json($lockedIdent ?? '') || '').toLowerCase();
             const submitBtn = document.getElementById('btnLoginSubmit');
             const identInput = document.getElementById('nomor_induk');
@@ -951,7 +955,7 @@
                         alertEl.style.background = '#eff6ff';
                         alertEl.style.color = '#1e3a8a';
                         alertEl.style.borderColor = '#bfdbfe';
-                        alertEl.textContent = 'Waktu tunggu 15 menit selesai. Silakan coba masuk kembali.';
+                        alertEl.textContent = 'Waktu tunggu ' + lockStageMinutes + ' menit selesai. Silakan coba masuk kembali.';
                     }
                     return;
                 }

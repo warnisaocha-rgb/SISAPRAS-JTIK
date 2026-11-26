@@ -1394,15 +1394,15 @@
                 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;">
                   @if($item->status === 'disetujui' || $item->status === 'sedang_dipinjam' || $item->status === 'selesai')
                     <span class="badge-status-box" style="background:#DCFCE7; color:#15803D; border:1px solid #BBF7D0; width: 85px; text-align: center;">
-                      DISETUJUI
+                      Disetujui
                     </span>
                   @elseif($item->status === 'ditolak')
                     <span class="badge-status-box" style="background:#FEE2E2; color:#DC2626; border:1px solid #FECACA; width: 85px; text-align: center;">
-                      DITOLAK
+                      Ditolak
                     </span>
                   @else
                     <span class="badge-status-box" style="background:#F1F5F9; color:#475569; border:1px solid #CBD5E1; width: 85px; text-align: center;">
-                      {{ strtoupper($item->status) }}
+                      {{ ucfirst(str_replace('_', ' ', $item->status)) }}
                     </span>
                   @endif
 
@@ -1600,26 +1600,26 @@
           <!-- KARTU JAMINAN FISIK KTM DIGITAL -->
           <div style="margin-top: 14px; border: 1.5px dashed #0091FF; border-radius: 8px; padding: 12px; background: #F0F7FF;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <span style="font-size: 11.5px; font-weight: 800; color: #0070F3; letter-spacing: 0.3px;">JAMINAN FISIK RESMI: KARTU TANDA MAHASISWA (KTM)</span>
-              <span style="background: #DCFCE7; color: #166534; font-size: 11.5px; font-weight: 800; padding: 2px 7px; border-radius: 999px;">TERVERIFIKASI AKTIF</span>
+              <span style="font-size: 11.5px; font-weight: 800; color: #0070F3; letter-spacing: 0.2px;">Jaminan Fisik Resmi: Kartu Tanda Mahasiswa (KTM)</span>
+              <span style="background: #DCFCE7; color: #166534; font-size: 11.5px; font-weight: 700; padding: 2px 7px; border-radius: 999px;">Terverifikasi Aktif</span>
             </div>
             
             <!-- DESAIN KTM CARD MOCKUP -->
             <div style="background: linear-gradient(135deg, #08296E 0%, #174092 100%); color: #FFFFFF; border-radius: 8px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 8px rgba(8, 41, 110, 0.2);">
               <div style="display: flex; align-items: center; gap: 10px;">
-                <div style="width: 36px; height: 46px; background: #FFFFFF; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11.5px; color: #64748B; font-weight: 700; text-align: center; border: 1px solid #CBD5E1;">
-                  PAS<br>FOTO
+                <div style="width: 36px; height: 46px; background: #FFFFFF; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #64748B; font-weight: 700; text-align: center; border: 1px solid #CBD5E1;">
+                  Pas<br>Foto
                 </div>
                 <div>
-                  <div style="font-size: 11.5px; color: #FCD34D; font-weight: 700; letter-spacing: 0.5px;">UNIVERSITAS NEGERI MAKASSAR</div>
+                  <div style="font-size: 11.5px; color: #FCD34D; font-weight: 700; letter-spacing: 0.3px;">Universitas Negeri Makassar</div>
                   <div id="ktmCardNama" style="font-size: 11px; font-weight: 800; color: #FFFFFF; margin-top: 1px;">-</div>
                   <div id="ktmCardNim" style="font-size: 11.5px; color: #E2E8F0; font-family: monospace;">NIM: -</div>
                   <div id="ktmCardProdi" style="font-size: 11.5px; color: #BAE6FD; margin-top: 1px;">-</div>
                 </div>
               </div>
               <div style="text-align: right;">
-                <div style="font-size: 11.5px; color: #94A3B8;">KARTU MAHASISWA</div>
-                <div style="font-size: 11.5px; font-weight: 800; color: #22C55E;">VALID 2026</div>
+                <div style="font-size: 11.5px; color: #94A3B8;">Kartu Mahasiswa</div>
+                <div style="font-size: 11.5px; font-weight: 800; color: #22C55E;">Valid {{ date('Y') }}</div>
               </div>
             </div>
           </div>
@@ -1743,7 +1743,7 @@
       <div class="modal-header">
         <div class="modal-title-wrap">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          <span class="modal-title">{{ strtoupper($ruangan->nama_ruangan ?? $badgeRuangan ?? 'LABORATORIUM') }} — Informasi &amp; Cek Stok</span>
+          <span class="modal-title">{{ $ruangan->nama_ruangan ?? $badgeRuangan ?? 'Laboratorium' }} — Informasi &amp; Cek Stok</span>
         </div>
         <button type="button" class="btn-close-modal" onclick="closeRoomInfoModal()">×</button>
       </div>

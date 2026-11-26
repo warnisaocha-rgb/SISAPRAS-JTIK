@@ -1989,7 +1989,7 @@
       <div class="modal-header" style="padding: 16px 20px; border-bottom: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between;">
         <div style="display: flex; align-items: center; gap: 10px;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          <span style="font-size: 13.5px; font-weight: 800; color: #0F172A;">{{ strtoupper($ruangan->nama_ruangan ?? $badgeRuangan ?? 'LABORATORIUM') }} — Informasi &amp; Cek Stok</span>
+          <span style="font-size: 13.5px; font-weight: 800; color: #0F172A;">{{ $ruangan->nama_ruangan ?? $badgeRuangan ?? 'Laboratorium' }} — Informasi &amp; Cek Stok</span>
         </div>
         <button type="button" onclick="closeRoomInfoModal()" style="border:none; background:none; font-size:18px; cursor:pointer; color:#64748B;">×</button>
       </div>

@@ -1734,7 +1734,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
               <span id="detailKodeRuangan" class="badge-asset-code" style="font-size: 11.5px;">-</span>
-              <span id="detailBadgeRuangan" class="room-badge room-badge-lab" style="font-size: 11.5px; padding: 2px 10px;">RUANGAN</span>
+              <span id="detailBadgeRuangan" class="room-badge room-badge-lab" style="font-size: 11.5px; padding: 2px 10px;">Ruangan</span>
             </div>
             <h3 id="detailNamaRuangan" style="font-size: 13px; font-weight: 800; color: #0F172A; margin: 0 0 4px 0;">-</h3>
             <span class="condition-badge condition-baik">Status: Tersedia &amp; Aktif</span>
@@ -2064,7 +2064,7 @@
       document.getElementById('detailJumlahSarpras').textContent = (room.sarpras_count || 0) + ' Komoditas Sarpras Terdaftar';
 
       const badge = document.getElementById('detailBadgeRuangan');
-      badge.textContent = room.nama_ruangan || 'RUANGAN';
+      badge.textContent = room.nama_ruangan || 'Ruangan';
       const kodeR = (room.kode_ruangan || '').toUpperCase();
       const namaR = (room.nama_ruangan || '').toUpperCase();
       if (kodeR.includes('BENGKEL') || kodeR.includes('BKL') || namaR.includes('BENGKEL')) {

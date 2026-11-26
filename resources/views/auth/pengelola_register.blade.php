@@ -174,8 +174,7 @@
             color: #c2410c;
             font-size: 11px;
             font-weight: 800;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
+            letter-spacing: 0.2px;
             margin-bottom: 10px;
         }
 
