@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Kelas;
 use App\Models\User;
 use App\Models\Ruangan;
 use App\Models\Sarpras;
@@ -13,31 +14,33 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        Kelas::ensureSeeded();
+
         // =========================================================================
-        // 1. MASTER 3 UNIT ALAT & BAHAN (Unit Operasional: Laboratorium, Bengkel, Admin)
+        // 1. MASTER 3 UNIT ALAT & BAHAN (Unit Operasional: Laboratorium, Bengkel IT, Admin)
         // =========================================================================
         $ruangLab = Ruangan::updateOrCreate(
-            ['nama_ruangan' => 'Laboratorium'],
+            ['kode_ruangan' => 'RNG-LJT-01'],
             [
-                'kode_ruangan' => 'RNG-LJT-01',
+                'nama_ruangan' => 'Laboratorium',
                 'jenis_ruangan' => 'alat_bahan',
                 'lokasi_gedung' => 'Lantai 2 - Gedung A (Lab Terpadu JTIK)',
                 'pj_ruangan' => 'Sulaeman, S.T.',
-                'nip_pj' => 'NIP. 19850314 201212 1 001',
-                'role_pj' => 'Laboran Lab Komputer 1',
+                'nip_pj' => 'NIP. 19900202 201504 1 002',
+                'role_pj' => 'Laboran Laboratorium',
                 'kondisi' => 'tersedia',
             ]
         );
 
         $ruangBengkel = Ruangan::updateOrCreate(
-            ['nama_ruangan' => 'Bengkel'],
+            ['kode_ruangan' => 'RNG-BAV-03'],
             [
-                'kode_ruangan' => 'RNG-BAV-03',
+                'nama_ruangan' => 'Bengkel IT',
                 'jenis_ruangan' => 'alat_bahan',
-                'lokasi_gedung' => 'Lantai 1 - Gedung B (Workshop Bengkel)',
+                'lokasi_gedung' => 'Lantai 1 - Gedung B (Bengkel IT)',
                 'pj_ruangan' => 'Fahrul, S.Pd., M.T.',
-                'nip_pj' => 'NIP. 19730115 200501 1 003',
-                'role_pj' => 'Kepala Unit Bengkel Jurusan',
+                'nip_pj' => 'NIP. 19920303 201803 1 003',
+                'role_pj' => 'Kepala Unit Bengkel IT',
                 'kondisi' => 'tersedia',
             ]
         );
@@ -96,7 +99,7 @@ class DatabaseSeeder extends Seeder
         // =========================================================================
 
         // A. Admin Sarpras (Pusat / Ruang Admin)
-        $adminSarpras = User::updateOrCreate(
+        $adminSarpras = User::firstOrCreate(
             ['email' => 'admin.sarpras@unm.ac.id'],
             [
                 'nomor_induk' => '198501012010121001',
@@ -108,8 +111,8 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // B. Pengelola / Admin Ruang Laboratorium
-        $pengelolaLab = User::updateOrCreate(
+        // B. Pengelola Ruang Laboratorium
+        $pengelolaLab = User::firstOrCreate(
             ['email' => 'pengelola.lab@unm.ac.id'],
             [
                 'nomor_induk' => '199002022015041002',
@@ -121,8 +124,8 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // C. Pengelola / Admin Ruang Bengkel
-        $pengelolaBengkel = User::updateOrCreate(
+        // C. Pengelola Ruang Bengkel IT
+        $pengelolaBengkel = User::firstOrCreate(
             ['email' => 'pengelola.bengkel@unm.ac.id'],
             [
                 'nomor_induk' => '199203032018031003',
@@ -134,8 +137,8 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // C2. Pengelola / Admin Ruang Admin JTIK & Sarana Ruangan
-        $pengelolaAdmin = User::updateOrCreate(
+        // C2. Pengelola Unit Administrasi
+        $pengelolaAdmin = User::firstOrCreate(
             ['email' => 'ahmad.dahlan@unm.ac.id'],
             [
                 'nomor_induk' => '197906122013041002',
@@ -147,52 +150,52 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // D. Akun Mahasiswa
-        $mhs1 = User::updateOrCreate(
-            ['email' => '230209501003@mhs.unm.ac.id'],
+        // D. Akun Mahasiswa Terdaftar
+        $mhs1 = User::firstOrCreate(
+            ['nomor_induk' => '250210500034'],
             [
-                'nomor_induk' => '230209501003',
-                'name' => 'Kelompok 2',
-                'password' => Hash::make('Maba23ft'),
+                'email' => '250210500034@mhs.unm.ac.id',
+                'name' => 'Warnisyah Armin',
+                'password' => Hash::make('Mahasiswa123!'),
                 'role' => 'mahasiswa',
                 'status_akun' => 'aktif',
-                'jurusan' => 'Pendidikan Teknik Informatika dan Komputer',
+                'jurusan' => 'TEKOM C 25',
             ]
         );
 
-        $mhs2 = User::updateOrCreate(
-            ['email' => '230209501010@mhs.unm.ac.id'],
+        $mhs2 = User::firstOrCreate(
+            ['nomor_induk' => '220209501012'],
             [
-                'nomor_induk' => '230209501010',
-                'name' => 'Asyifa Nur Cahya Cantika',
-                'password' => Hash::make('Maba23ft'),
+                'email' => '220209501012@mhs.unm.ac.id',
+                'name' => 'Asyifa Nur Cahya Savitri',
+                'password' => Hash::make('Mahasiswa123!'),
                 'role' => 'mahasiswa',
                 'status_akun' => 'aktif',
-                'jurusan' => 'Pendidikan Teknik Informatika dan Komputer',
+                'jurusan' => 'PTIK A 24',
             ]
         );
 
-        $mhs3 = User::updateOrCreate(
-            ['email' => '230209501045@mhs.unm.ac.id'],
+        $mhs3 = User::firstOrCreate(
+            ['nomor_induk' => '230209501045'],
             [
-                'nomor_induk' => '230209501045',
+                'email' => '230209501045@mhs.unm.ac.id',
                 'name' => 'Didi Naufal Nur Auliah',
-                'password' => Hash::make('Maba23ft'),
+                'password' => Hash::make('Mahasiswa123!'),
                 'role' => 'mahasiswa',
                 'status_akun' => 'aktif',
-                'jurusan' => 'Pendidikan Teknik Informatika dan Komputer',
+                'jurusan' => 'PTIK A 24',
             ]
         );
 
-        $mhs4 = User::updateOrCreate(
-            ['email' => '230209502001@mhs.unm.ac.id'],
+        $mhs4 = User::firstOrCreate(
+            ['nomor_induk' => '220209502011'],
             [
-                'nomor_induk' => '230209502001',
-                'name' => 'Endog Suroboyo',
-                'password' => Hash::make('Maba23ft'),
+                'email' => '220209502011@mhs.unm.ac.id',
+                'name' => 'Ahmad Fauzan R.',
+                'password' => Hash::make('Mahasiswa123!'),
                 'role' => 'mahasiswa',
                 'status_akun' => 'aktif',
-                'jurusan' => 'Teknik Komputer',
+                'jurusan' => 'TEKOM B 24',
             ]
         );
 
@@ -214,6 +217,7 @@ class DatabaseSeeder extends Seeder
                 'kondisi' => 'baik',
                 'status' => 'tersedia',
                 'spesifikasi' => 'Lampu: Normal, Port: HDMI & VGA, Resolusi XGA',
+                'foto' => 'sarpras/proyektor.jpg',
             ]
         );
 
@@ -267,6 +271,7 @@ class DatabaseSeeder extends Seeder
                 'kondisi' => 'baik',
                 'status' => 'tersedia',
                 'spesifikasi' => 'ATmega328P DIP, Paket Sensor Lengkap, Jumper & Breadboard',
+                'foto' => 'sarpras/arduino-uno.jpg',
             ]
         );
 

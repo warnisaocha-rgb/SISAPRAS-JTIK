@@ -12,7 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('ruangans', function (Blueprint $table) {
-            //
+            if (!Schema::hasColumn('ruangans', 'lokasi_gedung')) {
+                $table->string('lokasi_gedung')->nullable()->after('nama_ruangan');
+            }
+            if (!Schema::hasColumn('ruangans', 'nip_pj')) {
+                $table->string('nip_pj')->nullable()->after('pj_ruangan');
+            }
+            if (!Schema::hasColumn('ruangans', 'role_pj')) {
+                $table->string('role_pj')->nullable()->after('nip_pj');
+            }
         });
     }
 
@@ -22,7 +30,11 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('ruangans', function (Blueprint $table) {
-            //
+            foreach (['role_pj', 'nip_pj', 'lokasi_gedung'] as $col) {
+                if (Schema::hasColumn('ruangans', $col)) {
+                    $table->dropColumn($col);
+                }
+            }
         });
     }
 };
