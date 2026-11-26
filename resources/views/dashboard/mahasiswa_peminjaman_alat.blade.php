@@ -1798,7 +1798,10 @@
         </div>
 
         <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0;">
-          <span style="font-size: 11px; font-weight: 700; color: #334155;">Jumlah Unit yang diajukan:</span>
+          <div>
+            <div style="font-size: 11.5px; font-weight: 700; color: #334155;">Jumlah Unit yang diajukan:</div>
+            <div id="mdoMaxHint" style="font-size: 11px; color: #64748B; margin-top: 2px;">Maks. 2 unit</div>
+          </div>
           <div class="qty-counter-row">
             <button type="button" id="mdoBtnMinus" class="btn-counter" onclick="adjustQty(-1)" aria-label="Kurangi jumlah">-</button>
             <input type="number" id="mdoQtyInput" class="input-counter" value="1" min="1" max="2" readonly aria-label="Jumlah unit">
@@ -2237,8 +2240,15 @@
       document.getElementById('mdoNama').textContent = item.nama;
       document.getElementById('mdoRuangan').textContent = item.ruangan;
       document.getElementById('mdoTersedia').textContent = item.tersedia + ' Unit Tersedia';
+      const maxAllowed = Math.max(1, Math.min(item.tersedia, item.maks || 2));
       document.getElementById('mdoQtyInput').value = 1;
-      document.getElementById('mdoQtyInput').max = Math.max(1, Math.min(item.tersedia, item.maks || 2));
+      document.getElementById('mdoQtyInput').max = maxAllowed;
+      const maxHintEl = document.getElementById('mdoMaxHint');
+      if (maxHintEl) {
+        maxHintEl.textContent = item.tersedia < (item.maks || 2)
+          ? 'Maks. ' + maxAllowed + ' unit (sesuai stok)'
+          : 'Maks. ' + maxAllowed + ' unit';
+      }
       syncQtyCounterButtons();
 
       const img = document.getElementById('mdoFoto');
